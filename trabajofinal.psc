@@ -1,15 +1,17 @@
 Algoritmo ventaPasajesAereos
-	Definir opcionMenu,  listaVuelos Como Caracter
+	Definir opcionMenu,opcionMenu1, opcionMenu2, nombreBusqueda, apellidoBusqueda, nombreyapellidoBusqueda como texto
 	Definir elegirVuelo, asientosTotales,ruta, asientosDisponibles1, asientosDisponibles2, asientosDisponibles3, asientosDisponibles4 como entero
-	Definir costo como real
-	Definir listaPasajeros como Texto
-	Definir valido Como Logico
+	Definir i,j Como Entero
+	Definir costoPasaje,costo, porcentajeVentasRuta1, porcentajeVentasRuta2, porcentajeVentasRuta3, porcentajeVentasRuta4 como real
+	Definir validacion, valido, validarEquipaje, dniValido, telValido Como Logico
 	
 	//--- Rutas aéreas disponibles a la venta---
+	Definir listaVuelos como texto
 	Dimension listaVuelos[4,3]
 	cargarVuelos(listaVuelos) 
 	
 	// ----- Lista de pasajeros con todos los datos -----
+	Definir listaPasajeros como Texto
 	Dimension listaPasajeros[400,8]
 	
 	//--- Inicializamos las variables ----
@@ -22,17 +24,17 @@ Algoritmo ventaPasajesAereos
 	
 	// -----Menu-----
 	Escribir "--- BIENVENIDO AL SISTEMA DE VENTA DE PASAJES AEREOS ---"
+	Repetir
 		Escribir " "
-		Escribir " Seleccione una opción para continuar."
+		Escribir " Seleccione una opción para continuar o escriba SALIR."
 		Escribir " 1. Venta pasaje."
 		Escribir " 2. Buscar pasaje vendido."
 		Escribir " 3. Buscar pasajero."
 		Escribir " 4. Ordenar y mostrar lista pasajeros."
 		Escribir " 5. Listado/s."
-		Escribir " 6. Salir"
 		Leer opcionMenu
 		Escribir ""	
-		
+		opcionMenu = Mayusculas(opcionMenu)
 		Segun opcionMenu Hacer
 			"1":
 				// ----- VENTA DE PASAJE -----
@@ -81,7 +83,7 @@ Algoritmo ventaPasajesAereos
 						Si valido = Verdadero Entonces
 							escribir "Plaza disponible."
 							costo = costoPasaje1(asientosDisponibles3, listaVuelos[2,2], elegirVuelo) // Generamos el costo del pasaje
-							cargarPasajeros(listaVuelos[2,0],costo,asientosDisponibles3,elegirPasajeros,asientosTotales)// Cargamos los datos del pasajero y mostramos RESUMEN
+							cargarPasajeros(listaVuelos[2,0],costo,asientosDisponibles3,listaPasajeros,asientosTotales)// Cargamos los datos del pasajero y mostramos RESUMEN
 						SiNo
 							Escribir "No hay asientos disponibles."
 						Fin Si
@@ -93,7 +95,7 @@ Algoritmo ventaPasajesAereos
 						Si valido = Verdadero Entonces
 							escribir "Plaza disponible."
 							costo = costoPasaje1(asientosDisponibles4, listaVuelos[3,2], elegirVuelo)// Generamos el costo del pasaje
-							cargarPasajeros(listaVuelos[3,0],costo,asientosDisponibles4,elegirPasajeros,asientosTotales)// Cargamos los datos del pasajero y mostramos RESUMEN
+							cargarPasajeros(listaVuelos[3,0],costo,asientosDisponibles4,listaPasajeros,asientosTotales)// Cargamos los datos del pasajero y mostramos RESUMEN
 						SiNo
 							Escribir "No hay asientos disponibles."
 						Fin Si
@@ -128,19 +130,92 @@ Algoritmo ventaPasajesAereos
 					De Otro Modo:
 						escribir "Opción incorrecta, vuelva intentarlo"
 				Fin Segun
-			Hasta Que eleccionVuelo = 1 O eleccionVuelo = 2 O eleccionVuelo = 3 O eleccionVuelo = 4
+			Hasta Que elegirVuelo = 1 O elegirVuelo = 2 O elegirVuelo = 3 O elegirVuelo = 4
 			// ----- FIN BUSCAR PASAJE VENDIDO POR ASIENTO -----
 		"3": 
 			// ----- BUSCAR PASAJE VENDIDO POR NOMBRE Y APELLIDO -----
+			Escribir "Ingrese el nombre del pasejero que desea buscar"
+			Leer nombreBusqueda
+			Escribir "Ingrese el apellido del pasajero"
+			Leer apellidoBusqueda
+			nombreyapellidoBusqueda = Concatenar(nombreBusqueda," ")
+			nombreyapellidoBusqueda = Concatenar(nombreyapellidoBusqueda, apellidoBusqueda)
+			buscarpasajeroNombre(listaPasajeros, asientosTotales, nombreyapellidoBusqueda)
+		
 			// ----- FIN BUSCAR PASAJE VENDIDO POR NOMBRE Y APELLIDO -----
 		"4":
 			// ----- ORDENAR PASAJE POR ASIENTO -----
+			Repetir
+			Escribir "a. Ordenar por número de asiento ascendente"
+			Escribir "b. Ordenar por número de asiento descendenteo"
+			Leer opcionMenu1
+			opcionMenu1 = Mayusculas(opcionMenu1)
+			Si opcionMenu1 <> "A" y opcionMenu1 <> "B" Entonces
+				Escribir "La opcion ingresada no es correcta, vuelva a intentarlo"
+			Fin si
+		Mientras Que opcionMenu1 <> "A" Y opcionMenu1 <> "B"
+		Repetir
+			Escribir "Ingrese el vuelo que desea ordenar"
+			Escribir "1. ", listaVuelos[0,0] // Buenos Aires - Bariloche
+			Escribir "2. ", listaVuelos[1,0] // Buenos Aires - Salta
+			Escribir "3. ", listaVuelos[2,0] // Rosario - Buenos Aires
+			Escribir "4. ", listaVuelos[3,0] // Mar Del Plata - Mendoza
+			Leer elegirVuelo
+			Segun elegirVuelo Hacer
+				1:
+					// Ordenar Buenos Aires - Bariloche
+					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, plazasDisponibles1, opcionMenu1)
+				2:
+					// Ordenar Buenos Aires - Salta
+					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, plazasDisponibles2, opcionMenu1)
+				3:
+					// Ordenar Rosario - Buenos Aires
+					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, plazasDisponibles3, opcionMenu1)
+				4:
+					// Ordenar Mar Del Plata - Mendoza
+					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, plazasDisponibles4, opcionMenu1)
+				De Otro Modo:
+					Escribir "Error, vuelva a intentarlo"
+			Fin Segun
+			
+		Hasta Que elegirVuelo = 1 O elegirVuelo = 2 O elegirVuelo = 3 O elegirVuelo = 4
 			// ----- FIN ORDENAR PASAJE POR ASIENTO -----
 		"5":
 			// ----- LISTADO -----
+			Repetir
+				Escribir "a. Cantidad de pasajes vendido por ruta aérea."
+				Escribir "b. Porcentaje de ventas por ruta aérea."
+				Leer opcionMenu2
+				opcionMenu2 = Mayusculas(opcionMenu2)
+				Segun opcionMenu2 Hacer
+					"A": 
+						Escribir "Cantidad de pasajes vendido en ruta 1:  " ,  asientosDisponibles1
+						Escribir "Cantidad de pasajes vendido en ruta 2:  " ,  asientosDisponibles2
+						Escribir "Cantidad de pasajes vendido en ruta 3:  " ,  asientosDisponibles3
+						Escribir "Cantidad de pasajes vendido en ruta 4:  " ,  asientosDisponibles4
+					"B":
+						porcentajeVentasRuta1 = (asientosDisponibles1/120) * 100;
+						Escribir "El porcentaje de ventas de la ruta ",listaVuelos[0,0]," es: " , porcentajeVentasRuta1 "%"
+						porcentajeVentasRuta2 = (asientosDisponibles2/120) * 100;
+						Escribir "El porcentaje de ventas de la ruta ",listaVuelos[1,0]," es: " , porcentajeVentasRuta2 "%"
+						porcentajeVentasRuta3 = (asientosDisponibles3/80) * 100;
+						Escribir "El porcentaje de ventas de la ruta ",listaVuelos[2,0]," es: " , porcentajeVentasRuta3 "%"
+						porcentajeVentasRuta4 = (asientosDisponibles4/80) * 100;
+						Escribir "El porcentaje de ventas de la ruta ",listaVuelos[3,0]," es: " , porcentajeVentasRuta4 "%"
+					De Otro Modo:
+						Escribir "Opción inválida."
+				Fin Segun
+			Mientras Que opcionMenu2 <> "A" Y opcionMenu2 <> "B"
+			
 			// ----- FIN LISTADO -----
-		Fin Segun
+		"SALIR": 
+			Escribir "Saliendo..."
+		De Otro Modo:
+			Escribir "Opción inválida."
+	Fin Segun
+Mientras Que opcionMenu <> "SALIR"
 FinAlgoritmo
+// ----- FIN MENU -----
 
 // ----- FUNCIONES Y SUBPROCESOS: -----
 
@@ -165,7 +240,7 @@ FinSubProceso
 
 //cargamos los pasajeros
 
-SubProceso cargarPasajeros(costo,costo,asientoNro, lista, asientosTotales)
+SubProceso cargarPasajeros(vuelo,costo,asientoNro, lista, asientosTotales)
 	definir nombrePasajero, apellidoPasajero, telPasajero, dniPasajero, validarEquipaje, resumenPasajero Como texto
 	Definir numpasajeroFrecuente, nombreYApellido,costoPasajero,numPasajero,asiento como texto
 	Definir cadenaValido, telValido, dniValido Como Logico
@@ -230,19 +305,19 @@ Mientras Que Longitud(numpasajeroFrecuente) <> 4
 
 
 // ----- Carga del ASIENTO -----
-asiento = ConvertirATexto(plazaNro) // Se utiliza la plaza disponible para asignar el asiento
+asiento = ConvertirATexto(asientoNro) // Se utiliza la plaza disponible para asignar el asiento
 
 costoPasajero=ConvertirATexto(costoFinal)
 
 // Cargamos los datos al array	
-lista[plazasTotales-1,0] = vuelo
-lista[plazasTotales-1,1] = nombreYApellido
-lista[plazasTotales-1,2] = dniPasajero
-lista[plazasTotales-1,3] = telPasajero
-lista[plazasTotales-1,4] = validarEquipaje
-lista[plazasTotales-1,5] = numPasajero
-lista[plazasTotales-1,6] = asiento
-lista[plazasTotales-1,7] = costoPasajero
+lista[asientosTotales - 1,0] = vuelo
+lista[asientosTotales - 1,1] = nombreYApellido
+lista[asientosTotales - 1,2] = dniPasajero
+lista[asientosTotales - 1,3] = telPasajero
+lista[asientosTotales - 1,4] = validarEquipaje
+lista[asientosTotales - 1,5] = numPasajero
+lista[asientosTotales - 1,6] = asiento
+lista[asientosTotales - 1,7] = costoPasajero
 
 // ----- RESUMEN -----
 Escribir ""
@@ -253,6 +328,8 @@ Escribir "DNI: ", dniPasajero
 Escribir "Teléfono: ", telPasajero
 Escribir "Equipaje en bodega: ", validarEquipaje
 Escribir "Número pasajero frecuente: ", numpasajeroFrecuente
+Escribir "Asiento: ", asiento
+Escribir "Costo pasaje: $", costoFinal
 Escribir "============================="
 
 FinSubProceso
@@ -434,6 +511,180 @@ SubProceso buscarPasajerosAsiento(listaPasajeros,ruta,asientosTotales,asientosDi
 					Fin Para
 				Fin Para
 		Fin Segun
-	FinSi
+		// Busqueda
+		Escribir "Ingrese el asiento del pasajero a buscar:"
+		Leer asiento
+		i=0
+		
+		Mientras i < asientosDisponibles Hacer
+			Si array[i,6] == ConvertirATexto(asiento) Entonces
+				Escribir "============================="
+				Escribir "Nombre y Apellido: ", array[i,1]
+				Escribir "Ruta: ", array[i,0]
+				Escribir "DNI: ", array[i,2]
+				Escribir "============================="
+				encontrado = Verdadero
+				i = plazasDisponibles
+			Fin Si
+			i = i + 1
+		Fin Mientras
+		
+		Si encontrado = Falso Entonces
+			Escribir "Asiento no encontrado."
+		Fin Si
+	Fin Si
 FinSubProceso
 // ----- FIN BUSCAR PASAJERO POR ASIENTO -----
+
+//-----BUSCAR PASAJERO POR NOMBRE Y APELLIDO ------
+SubProceso buscarpasajeroNombre(lista, asientosTotales, nombreyapellido)
+	definir i Como Entero
+	definir encontrado Como Logico
+	encontrado = Falso
+	i = 0
+	
+	Mientras i < asientosTotales Hacer
+		Si Mayusculas(nombreyapellido) == Mayusculas(lista[i,1]) Entonces
+			Escribir "Nombre y Apellido: ", lista[i,1]
+			Escribir "Ruta: ", lista[i,0]
+			Escribir "DNI: ", lista[i,2]
+			encontrado = Verdadero
+			i = asientosTotales
+		Fin Si
+		i = i + 1
+	Fin Mientras
+	Si encontrado = Falso Entonces
+		Escribir "Persona no encontrada"
+	Fin Si
+FinSubProceso
+// ----- FIN BUSCAR PASAJERO POR NOMBRE Y APELLIDO -----
+// ----- ORDENAR POR ASIENTO -----
+SubProceso ordenarPORasiento(listaPasajeros, ruta, asientosTotales, asientosDisponibles, ordenarPor)
+	Definir array como Texto
+	Definir i, j Como Entero
+	Definir auxNombre, AuxDni, auxTel, auxEquipaje, auxNumPasajero, auxAsiento, auxCosto Como Caracter
+	Definir posMenor Como Entero
+	
+// Creacion de un nuevo array para guardar los datos del vuelo a ordenar
+	
+	Si asientosDisponibles <= 0 Entonces
+		Escribir "No hay pasajes vendidos en esta ruta."
+	SiNo
+		Dimension array[asientosDisponibles, 8]
+		Segun ruta Hacer
+			1:
+				Para i=0 Hasta asientosTotales - 1 Hacer
+					Para j=0 Hasta 7 Con Paso 1 Hacer
+						Si listaPasajeros[i,0] == "Buenos Aires - Bariloche" Entonces
+							array[i,j] = listaPasajeros[i,j]
+						Fin Si
+					Fin Para
+				Fin Para
+			2:
+				Para i=0 Hasta asientosTotales - 1 Hacer
+					Para j=0 Hasta 7 Con Paso 1 Hacer
+						Si listaPasajeros[i,0] == " Bueno Aires - Salta" Entonces
+							array[i,j] = listaPasajeros[i,j]
+						Fin Si
+					Fin Para
+				Fin Para
+			3:
+				Para i=0 Hasta asientosTotales - 1 Hacer
+					Para j=0 Hasta 7 Con Paso 1 Hacer
+						Si listaPasajeros[i,0] == "Rosario - Buenos Aires" Entonces
+							array[i,j] = listaPasajeros[i,j]
+						Fin Si
+					Fin Para
+				Fin Para
+			4:
+				Para i=0 Hasta asientosTotales-1 Hacer
+					Para j=0 Hasta 7 Con Paso 1 Hacer
+						Si listaPasajeros[i,0] == "Mar Del Plata - Mendoza" Entonces
+							array[i,j] = listaPasajeros[i,j]
+						Fin Si
+					Fin Para
+				Fin Para
+		Fin Segun
+		
+		// ORDENAMIENTO
+		
+		Si ordenarpor == "A" Entonces
+			// ORDEN ASCENDENTE
+			Para i <- 0 Hasta asientosDisponibles - 2
+				posMenor = i
+				Para j <- i+1 Hasta asientosDisponibles - 1
+					Si array[posMenor,6] > array[j,6] Entonces
+						posMenor = j
+					Fin Si
+				Fin Para
+				
+				auxNombre = array[i, 1]
+				AuxDni = array[i, 2]
+				auxTel = array[i, 3]
+				auxEquipaje = array[i, 4]
+				auxNumPasajero = array[i, 5]
+				auxAsiento = array[i, 6]
+				auxCosto = array[i, 7]
+				array[i, 1] = array[posMenor, 1]
+				array[i, 2] = array[posMenor, 2]
+				array[i, 3] = array[posMenor, 3]
+				array[i, 4] = array[posMenor, 4]
+				array[i, 5] = array[posMenor, 5]
+				array[i, 6] = array[posMenor, 6]
+				array[i, 7] = array[posMenor, 7]
+				
+				array[posMenor, 1] = auxNombre
+				array[posMenor, 2] = AuxDni
+				array[posMenor, 3] = auxTel
+				array[posMenor, 4] = auxEquipaje
+				array[posMenor, 5] = auxNumPasajero
+				array[posMenor, 6] = auxAsiento
+				array[posMenor, 7] = auxCosto
+			FinPara
+		SiNo
+			// ORDEN DESCENDENTE
+			Para i <- 0 Hasta AsientosDisponibles - 2 
+				posMenor = i
+				Para j <- i+1 Hasta asientosDisponibles - 1
+					Si array[posMenor,6] < array[j,6] Entonces
+						posMenor = j
+					Fin Si
+				Fin Para
+				auxNombre = array[i, 1]
+				AuxDni = array[i, 2]
+				auxTel = array[i, 3]
+				auxEquipaje = array[i, 4]
+				auxNumPasajero = array[i, 5]
+				auxAsiento = array[i, 6]
+				auxCosto = array[i, 7]
+				
+				array[i, 1] = array[posMenor, 1]
+				array[i, 2] = array[posMenor, 2]
+				array[i, 3] = array[posMenor, 3]
+				array[i, 4] = array[posMenor, 4]
+				array[i, 5] = array[posMenor, 5]
+				array[i, 6] = array[posMenor, 6]
+				array[i, 7] = array[posMenor, 7]
+				
+				array[posMenor, 1] = auxNombre
+				array[posMenor, 2] = AuxDni
+				array[posMenor, 3] = auxTel
+				array[posMenor, 4] = auxEquipaje
+				array[posMenor, 5] = auxNumPasajero
+				array[posMenor, 6] = auxAsiento
+				array[posMenor, 7] = auxCosto
+			FinPara
+		Fin Si
+		
+		// Mostrando la lista ordenada
+		Escribir ""
+		Para i=0 Hasta AsientosDisponibles - 1 Hacer
+			Para j=0 Hasta 7 Con Paso 1 Hacer
+				Escribir Sin Saltar array[i, j], " | "
+			Fin Para
+			Escribir ""
+		Fin Para
+		Escribir ""
+	Fin Si
+FinSubProceso
+// ----- FIN ORDENAR POR ASIENTO -----
