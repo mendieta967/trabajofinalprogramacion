@@ -164,16 +164,16 @@ Algoritmo ventaPasajesAereos
 			Segun elegirVuelo Hacer
 				1:
 					// Ordenar Buenos Aires - Bariloche
-					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, plazasDisponibles1, opcionMenu1)
+					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, asientosDisponibles1, opcionMenu1)
 				2:
 					// Ordenar Buenos Aires - Salta
-					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, plazasDisponibles2, opcionMenu1)
+					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, asientosDisponibles2, opcionMenu1)
 				3:
 					// Ordenar Rosario - Buenos Aires
-					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, plazasDisponibles3, opcionMenu1)
+					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, asientosDisponibles3, opcionMenu1)
 				4:
 					// Ordenar Mar Del Plata - Mendoza
-					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, plazasDisponibles4, opcionMenu1)
+					ordenarPORasiento(listaPasajeros, elegirVuelo, asientosTotales, asientosDisponibles4, opcionMenu1)
 				De Otro Modo:
 					Escribir "Error, vuelva a intentarlo"
 			Fin Segun
@@ -524,7 +524,7 @@ SubProceso buscarPasajerosAsiento(listaPasajeros,ruta,asientosTotales,asientosDi
 				Escribir "DNI: ", array[i,2]
 				Escribir "============================="
 				encontrado = Verdadero
-				i = plazasDisponibles
+				i = asientosDisponibles
 			Fin Si
 			i = i + 1
 		Fin Mientras
